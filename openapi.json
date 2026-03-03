@@ -1,0 +1,2696 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SS&C AI Gateway Security & Governance Platform",
+    "description": "This is the API for SS&C AI Gateway, the AI security & governance platform",
+    "version": "0.7.0.4"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/rag/chat/completions": {
+      "post": {
+        "tags": [
+          "LLM"
+        ],
+        "summary": "Request/Response with an LLM",
+        "description": "LLM Chat Completion grounded in Enterprise files data",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/rag_services.RAGChatRequest"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rag_services.RAGChatResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rag_services.RAGChatResponse"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rag_services.RAGChatResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rag_services.RAGChatResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rag/chat/get_chunks": {
+      "post": {
+        "tags": [
+          "LLM"
+        ],
+        "summary": "Fetch your chunks from the RAG-Postgres DB",
+        "description": "Fetch your chunks from the RAG-Postgres DB that closely match your query",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/rag_services.RAGChatRequest"
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rag_services.RAGChatResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rag_services.RAGChatResponse"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rag_services.RAGChatResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/rag_services.RAGChatResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rag/ingest/delete": {
+      "post": {
+        "tags": [
+          "RAG"
+        ],
+        "summary": "Delete the existing file-ID from the RAG-Postgres DB within a specific tenant.",
+        "description": "RAG Deregister File from Postgres API",
+        "requestBody": {
+          "description": "Registration File Struct",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.RegisteredFile"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGRegisterResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGRegisterResponse"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGRegisterResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGRegisterResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rag/ingest/listfiles": {
+      "get": {
+        "tags": [
+          "RAG"
+        ],
+        "summary": "Lists specific files from Postgres and returns the unique FileID, for a specific Tenant and BU-ID combo.",
+        "description": "List Registered Files within a tenant from the RAG-Postgres DB",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/models.RegisteredFileResponse"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rag/ingest/register": {
+      "post": {
+        "tags": [
+          "RAG"
+        ],
+        "summary": "Inserts a RAG-config for a specific file into Postgres and returns the unique FileID.",
+        "description": "Register a file-ingestion Config into the RAG-Postgres DB",
+        "requestBody": {
+          "description": "RAG Register Request Struct",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.RAGRegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGRegisterResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGRegisterResponse"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGRegisterResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGRegisterResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rag/ingest/upload": {
+      "post": {
+        "tags": [
+          "RAG"
+        ],
+        "summary": "Upload File in chunks to RAG-Ingest (ganglia) service as a multipart/form-data",
+        "description": "RAG Ingestion API Upload File",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/ingest_upload_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGUploadResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGUploadResponse"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGUploadResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.RAGUploadResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/audio/check_transcription": {
+      "post": {
+        "tags": [
+          "transcription"
+        ],
+        "summary": "Check the status of a transcription request",
+        "description": "LLM Automatic Speech Recognization",
+        "requestBody": {
+          "description": "Transcription Response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.TranscriptionResponse"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.CheckTranscriptionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/audio/topic_output": {
+      "post": {
+        "summary": "Endpoint used only to codegen",
+        "description": "LLM Automatic Speech Recognization",
+        "requestBody": {
+          "description": "Transcription Response",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.TranscriptionTopicPayload"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.CheckTranscriptionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/audio/transcription": {
+      "post": {
+        "tags": [
+          "transcription"
+        ],
+        "summary": "Submit a transription request",
+        "description": "LLM Automatic Speech Recognization",
+        "requestBody": {
+          "description": "Transcription Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.TranscriptionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.TranscriptionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/chat/completions": {
+      "post": {
+        "tags": [
+          "LLM"
+        ],
+        "summary": "Request/Response with an LLM",
+        "description": "LLM Chat Completion",
+        "requestBody": {
+          "description": "LLM Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.AIRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.AIResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/embeddings": {
+      "post": {
+        "tags": [
+          "LLM"
+        ],
+        "summary": "Request/Response for Embeddings (using the new improved batch-request processing method)",
+        "description": "AI Embeddings",
+        "requestBody": {
+          "description": "Embedding Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.EmbeddingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.EmbeddingResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Not Acceptable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/usage": {
+      "get": {
+        "tags": [
+          "Usage"
+        ],
+        "summary": "List usage events",
+        "description": "Returns token and cost usage events for the authenticated tenant.",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "model_name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endpoint_type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "chat",
+                "embedding",
+                "audio",
+                "image"
+              ]
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "minimum": 1,
+              "maximum": 500
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.UsageListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/usage/summary": {
+      "get": {
+        "tags": [
+          "Usage"
+        ],
+        "summary": "Get aggregated usage summary",
+        "description": "Returns aggregated token and cost usage grouped by provider, model, endpoint, or user.",
+        "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "group_by",
+            "in": "query",
+            "description": "Repeat the parameter to group by multiple dimensions.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "provider",
+                  "model_name",
+                  "endpoint_type",
+                  "user_id"
+                ]
+              }
+            },
+            "style": "form",
+            "explode": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.UsageSummaryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/usage/cost-breakdown": {
+      "get": {
+        "tags": [
+          "Usage"
+        ],
+        "summary": "Get invoice-style cost breakdown",
+        "description": "Returns line-item costs for a billing period.",
+        "parameters": [
+          {
+            "name": "period_start",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "period_end",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "model_name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.CostBreakdownResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/feedback": {
+      "post": {
+        "tags": [
+          "Feedback"
+        ],
+        "summary": "Submit user feedback",
+        "description": "Submit feedback about the service",
+        "requestBody": {
+          "description": "Feedback Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.ChatCompletionFeedbackRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Feedback submitted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid JSON format or validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/feedback/{tarvos_id}": {
+      "get": {
+        "tags": [
+          "Feedback"
+        ],
+        "summary": "Get single feedback",
+        "description": "Get a single feedback by Tarvos ID",
+        "parameters": [
+          {
+            "name": "tarvos_id",
+            "in": "path",
+            "description": "Tarvos ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Feedback details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.ChatCompletionFeedbackResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Feedback not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Invalid Tarvos ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/feedbacks": {
+      "get": {
+        "tags": [
+          "Feedback"
+        ],
+        "summary": "Get multiple feedbacks",
+        "description": "Get all feedbacks or a filtered list based on time range",
+        "parameters": [
+          {
+            "name": "start_time",
+            "in": "query",
+            "description": "Start time for filtering (RFC3339 format)",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_time",
+            "in": "query",
+            "description": "End time for filtering (RFC3339 format)",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of feedbacks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/models.ChatCompletionFeedbackResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/guardrails/pii_detection": {
+      "post": {
+        "tags": [
+          "Guardrails"
+        ],
+        "summary": "Detects PII patterns in the provided text and returns detection results.",
+        "description": "Analyzes input text for sensitive data.",
+        "requestBody": {
+          "description": "Input text for PII detection. If 'is_chat_completion' is true, the input must contain 'messages' and 'model' fields following the OpenAI chat format. Otherwise, any schema is accepted. Will contain additional config hyperparameters for the underlying model in the future (TARVOS-456).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.PIIDetectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Detection result with a flag indicating if PII was found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.AIGuardRailsPIIResults"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/guardrails/prompt_injection_detection": {
+      "post": {
+        "tags": [
+          "Guardrails"
+        ],
+        "summary": "Detects prompt injection patterns in the provided text and returns detection results.",
+        "description": "Analyzes input text for potential prompt injection attacks.",
+        "requestBody": {
+          "description": "Input text and isChatCompletion flag. Will contain additional config hyperparameters for the underlying model in the future (TARVOS-456).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.PromptInjectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Detection result with a flag and score",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.AIGuardRailsPromptInjectionResults"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/guardrails/toxicity_detection": {
+      "post": {
+        "tags": [
+          "Guardrails"
+        ],
+        "summary": "Detects toxicity patterns in the provided text and returns detection results.",
+        "description": "Analyzes input text for potential toxicity.",
+        "requestBody": {
+          "description": "Input text and isChatCompletion flag, will contain additional config hyperparameters for the underlying model in the future (TARVOS-456).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/models.ToxicityDetectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Detection result with a flag and score",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.AIGuardRailsToxicityResults"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.APIResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/promptops/inference/{prompt_artifact_version_id}": {
+      "post": {
+        "tags": [
+          "Promptops"
+        ],
+        "summary": "Make inferences from promptops endpoint using previously registered prompt-artifacts for a specific use-case.",
+        "description": "Parse request-body and optional file-upload based on prompt_artifact_version_id, Hydrate the prompt-template, and invoke Structify Python gRPC service to get back a stringified JSON object.",
+        "parameters": [
+          {
+            "name": "prompt_artifact_version_id",
+            "in": "path",
+            "description": "Prompt Artifact Version ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.PromptOpsInferenceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.PromptOpsInferenceResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.PromptOpsInferenceResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/promptops/swagger/{prompt_artifact_version_id}": {
+      "get": {
+        "tags": [
+          "Promptops"
+        ],
+        "summary": "Generate the swagger-docs for a promptops using previously registered prompt-artifacts for a specific use-case.",
+        "description": "Generate the swagger-docs for a specific use-case-ID based on previously registered prompt-artifacts.",
+        "parameters": [
+          {
+            "name": "prompt_artifact_version_id",
+            "in": "path",
+            "description": "Prompt Artifact Version ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.PromptOpsSwaggerResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/models.PromptOpsSwaggerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "error_control.StatusCode": {
+        "type": "integer",
+        "enum": [
+          107,
+          204,
+          300,
+          301,
+          400,
+          401,
+          403,
+          404,
+          429,
+          500
+        ],
+        "x-enum-comments": {
+          "StatusBadRequest": "Bad Request",
+          "StatusForbidden": "Forbidden",
+          "StatusGuardrailBlocked": "Guardrail Triggered - Blocked",
+          "StatusGuardrailTriggered": "Guardrail Triggered - Allowed",
+          "StatusInternalServerError": "Internal Server Error",
+          "StatusModelUnreachable": "Model Unreachable",
+          "StatusNoContent": "No Content",
+          "StatusNotFound": "Not Found",
+          "StatusRateLimitHit": "Rate Limit Hit",
+          "StatusUnauthorized": "Unauthorized"
+        },
+        "x-enum-varnames": [
+          "StatusModelUnreachable",
+          "StatusNoContent",
+          "StatusGuardrailBlocked",
+          "StatusGuardrailTriggered",
+          "StatusBadRequest",
+          "StatusUnauthorized",
+          "StatusForbidden",
+          "StatusNotFound",
+          "StatusRateLimitHit",
+          "StatusInternalServerError"
+        ]
+      },
+      "models.AIChoices": {
+        "type": "object",
+        "properties": {
+          "delta": {
+            "$ref": "#/components/schemas/models.AIMessage"
+          },
+          "finish_reason": {
+            "type": "string"
+          },
+          "index": {
+            "type": "integer"
+          },
+          "logprobs": {
+            "$ref": "#/components/schemas/models.Logprobs"
+          },
+          "message": {
+            "$ref": "#/components/schemas/models.AIMessage"
+          }
+        }
+      },
+      "models.AIFunctionParameters": {
+        "type": "object",
+        "properties": {
+          "additionalProperties": {
+            "type": "boolean"
+          },
+          "properties": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/models.AIFunctionProperty"
+            }
+          },
+          "required": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "models.AIFunctionProperty": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "models.AIFunctionRequest": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/models.AIFunctionParameters"
+          }
+        }
+      },
+      "models.AIGuardRailsLLMResponseScoring": {
+        "type": "object",
+        "properties": {
+          "average_exp_percentage": {
+            "type": "number"
+          },
+          "perplexity": {
+            "type": "number"
+          }
+        }
+      },
+      "models.AIGuardRailsPIIResults": {
+        "type": "object",
+        "properties": {
+          "found_pii": {
+            "type": "boolean"
+          },
+          "redacted_text": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "models.AIGuardRailsPresidio": {
+        "type": "object",
+        "properties": {
+          "found_pii": {
+            "type": "boolean"
+          }
+        }
+      },
+      "models.AIGuardRailsPromptInjectionResults": {
+        "type": "object",
+        "properties": {
+          "found_attack": {
+            "type": "boolean"
+          },
+          "prompt_injection_score": {
+            "type": "number"
+          }
+        }
+      },
+      "models.AIGuardRailsResults": {
+        "type": "object",
+        "properties": {
+          "blocked_response": {
+            "type": "boolean"
+          },
+          "llm_response_scoring": {
+            "$ref": "#/components/schemas/models.AIGuardRailsLLMResponseScoring"
+          },
+          "negative": {
+            "type": "boolean"
+          },
+          "positive": {
+            "type": "boolean"
+          },
+          "presidio": {
+            "$ref": "#/components/schemas/models.AIGuardRailsPresidio"
+          },
+          "prompt_injection": {
+            "description": "TARVOS-216 Chorus and Postman are breakingAWSBedrock       map[string][]AIGuardRailsAWSBedrock `json:\"aws_bedrock,omitempty\"`",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/models.AIGuardRailsPromptInjectionResults"
+              }
+            ]
+          },
+          "redacted_response": {
+            "type": "boolean"
+          }
+        }
+      },
+      "models.AIGuardRailsToxicityResults": {
+        "type": "object",
+        "properties": {
+          "found_toxicity": {
+            "type": "boolean"
+          },
+          "toxicity_score": {
+            "type": "number"
+          }
+        }
+      },
+      "models.AIMessage": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "description": "Use the custom ContentType",
+            "anyOf": [
+              {},
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/models.MessageContent"
+                }
+              }
+            ]
+          },
+          "role": {
+            "type": "string"
+          },
+          "tool_calls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.AIResponseToolCall"
+            }
+          }
+        }
+      },
+      "models.AIRequest": {
+        "type": "object",
+        "properties": {
+          "chat_template_kwargs": {
+            "$ref": "#/components/schemas/models.MinimalChatTemplateKwargs"
+          },
+          "correlation_id": {
+            "type": "string"
+          },
+          "frequency_penalty": {
+            "type": "number"
+          },
+          "guided_choice": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "guided_grammar": {
+            "type": "string"
+          },
+          "guided_regex": {
+            "type": "string"
+          },
+          "include_stop_str_in_output": {
+            "type": "boolean",
+            "description": "stop at the stop word but include it in the output"
+          },
+          "input": {
+            "type": "string"
+          },
+          "input_array": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "is_embeddings": {
+            "type": "boolean"
+          },
+          "length_penalty": {
+            "type": "number"
+          },
+          "logprobs": {
+            "type": "boolean"
+          },
+          "max_completion_tokens": {
+            "type": "integer"
+          },
+          "max_tokens": {
+            "type": "integer"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.AIMessage"
+            }
+          },
+          "min_p": {
+            "type": "number"
+          },
+          "model": {
+            "type": "string"
+          },
+          "n": {
+            "type": "integer"
+          },
+          "presence_penalty": {
+            "type": "number"
+          },
+          "repetition_penalty": {
+            "type": "number"
+          },
+          "seed": {
+            "type": "integer"
+          },
+          "stop": {
+            "type": "array",
+            "description": "response will stop when any of these words are returned",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stream": {
+            "type": "boolean"
+          },
+          "temperature": {
+            "type": "number"
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.AITool"
+            }
+          },
+          "top_k": {
+            "type": "integer"
+          },
+          "top_logprobs": {
+            "type": "integer"
+          },
+          "top_p": {
+            "type": "number"
+          },
+          "user": {
+            "type": "string"
+          }
+        }
+      },
+      "models.AIResponse": {
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.AIChoices"
+            }
+          },
+          "code": {
+            "type": "integer",
+            "description": "in cases we return 200 to user when the inference engine returns errors capture the code"
+          },
+          "created": {
+            "type": "integer"
+          },
+          "guardrails_results": {
+            "$ref": "#/components/schemas/models.AIGuardRailsResults"
+          },
+          "id": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string",
+            "description": "in cases we return 200 to user when the inference engine returns errors capture the message"
+          },
+          "model": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string"
+          },
+          "stop_reason": {
+            "type": "string"
+          },
+          "usage": {
+            "$ref": "#/components/schemas/models.AIUsage"
+          }
+        }
+      },
+      "models.AIResponseFunction": {
+        "type": "object",
+        "properties": {
+          "arguments": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "models.AIResponseToolCall": {
+        "type": "object",
+        "properties": {
+          "function": {
+            "$ref": "#/components/schemas/models.AIResponseFunction"
+          },
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "models.AITool": {
+        "type": "object",
+        "properties": {
+          "function": {
+            "$ref": "#/components/schemas/models.AIFunctionRequest"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "models.AIUsage": {
+        "type": "object",
+        "properties": {
+          "completion_tokens": {
+            "type": "integer"
+          },
+          "prompt_tokens": {
+            "type": "integer"
+          },
+          "total_tokens": {
+            "type": "integer"
+          }
+        }
+      },
+      "models.APIResult": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/error_control.StatusCode"
+          },
+          "condition": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "messages": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "models.ChatCompletionFeedbackRequest": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string"
+          },
+          "positive_feedback": {
+            "type": "boolean"
+          },
+          "tarvos_id": {
+            "type": "string"
+          }
+        }
+      },
+      "models.ChatCompletionFeedbackResponse": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "positive_feedback": {
+            "type": "boolean"
+          },
+          "tarvos_id": {
+            "type": "string"
+          }
+        }
+      },
+      "models.CheckTranscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "description": "the original request as submitted",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/models.TranscriptionRequest"
+              }
+            ]
+          },
+          "result": {
+            "$ref": "#/components/schemas/models.TranscriptionResult"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "models.ContentType": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.MessageContent"
+            }
+          },
+          "string_value": {
+            "type": "string"
+          }
+        }
+      },
+      "models.EmbeddingData": {
+        "type": "object",
+        "properties": {
+          "embedding": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "index": {
+            "type": "integer"
+          },
+          "object": {
+            "type": "string"
+          }
+        }
+      },
+      "models.EmbeddingRequest": {
+        "type": "object",
+        "properties": {
+          "correlation_id": {
+            "type": "string"
+          },
+          "input": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "model": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          }
+        }
+      },
+      "models.EmbeddingResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.EmbeddingData"
+            }
+          },
+          "guardrails_results": {
+            "$ref": "#/components/schemas/models.AIGuardRailsResults"
+          },
+          "id": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string"
+          },
+          "usage": {
+            "$ref": "#/components/schemas/models.EmbeddingResponse_usage"
+          }
+        }
+      },
+      "models.ExecutionConfiguration": {
+        "type": "object",
+        "properties": {
+          "blocking": {
+            "type": "boolean",
+            "description": "false schedule for backgroun execution"
+          },
+          "queue": {
+            "type": "string"
+          },
+          "service_level_breach_after_ms": {
+            "type": "integer",
+            "description": "The user expects the request to be complete in this many milliseconds from request time. If failed report breach through metrics."
+          },
+          "store": {
+            "type": "boolean",
+            "description": "should the result be stored must be true when blocking is false"
+          },
+          "store_expire_ms": {
+            "type": "integer",
+            "description": "the amount of time before the stored result is removed, the result must be picked up by this time"
+          },
+          "terminate_after_ms": {
+            "type": "integer",
+            "description": "End the request if it runs longer then this many milliseconds after the computation starts"
+          }
+        }
+      },
+      "models.ImageURL": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The URL of the image"
+          }
+        }
+      },
+      "models.Logprobs": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.TokenLogprob"
+            }
+          }
+        }
+      },
+      "models.MessageContent": {
+        "type": "object",
+        "properties": {
+          "image_url": {
+            "description": "Used when type is \"image_url\"",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/models.ImageURL"
+              }
+            ]
+          },
+          "text": {
+            "type": "string",
+            "description": "Used when type is \"text\""
+          },
+          "type": {
+            "type": "string",
+            "description": "\"text\" or \"image_url\""
+          }
+        }
+      },
+      "models.MinimalChatTemplateKwargs": {
+        "type": "object",
+        "properties": {
+          "enable_thinking": {
+            "type": "boolean"
+          }
+        }
+      },
+      "models.PIIDetectionRequest": {
+        "type": "object",
+        "properties": {
+          "is_chat_completion": {
+            "type": "boolean"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.AIMessage"
+            }
+          },
+          "model": {
+            "type": "string"
+          }
+        }
+      },
+      "models.PromptInjectionRequest": {
+        "type": "object",
+        "properties": {
+          "is_chat_completion": {
+            "type": "boolean"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.AIMessage"
+            }
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "models.PromptOpsInferenceResponse": {
+        "type": "object",
+        "properties": {
+          "guardrails_results": {
+            "$ref": "#/components/schemas/models.AIGuardRailsResults"
+          },
+          "id": {
+            "type": "string"
+          },
+          "llm_usage": {
+            "$ref": "#/components/schemas/models.AIUsage"
+          },
+          "structured_output": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "models.PromptOpsSwaggerResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "prompt_artifact_version_id": {
+            "type": "string"
+          },
+          "swagger": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "models.RAGConfig": {
+        "required": [
+          "tenant_id",
+          "user_id"
+        ],
+        "type": "object",
+        "properties": {
+          "append_tags": {
+            "type": "boolean"
+          },
+          "business_unit_id": {
+            "type": "string"
+          },
+          "chunk_overlap": {
+            "type": "integer"
+          },
+          "chunk_separator": {
+            "type": "string"
+          },
+          "chunk_size": {
+            "type": "integer"
+          },
+          "embedding_model_name": {
+            "type": "string"
+          },
+          "force_update": {
+            "type": "boolean"
+          },
+          "llm_name": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tenant_id": {
+            "maxLength": 255,
+            "type": "string"
+          },
+          "use_advanced_extractors": {
+            "type": "boolean"
+          },
+          "use_tesseract_ocr": {
+            "type": "boolean"
+          },
+          "user_id": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        }
+      },
+      "models.RAGRegisterRequest": {
+        "type": "object",
+        "properties": {
+          "checksum": {
+            "type": "string"
+          },
+          "file_id": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "rag_config_metadata": {
+            "$ref": "#/components/schemas/models.RAGConfig"
+          }
+        }
+      },
+      "models.RAGRegisterResponse": {
+        "type": "object",
+        "properties": {
+          "file_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "models.RAGUploadResponse": {
+        "type": "object",
+        "properties": {
+          "condition": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "boolean"
+          },
+          "file_id": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "messages": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "models.RegisteredFile": {
+        "required": [
+          "tenant_id"
+        ],
+        "type": "object",
+        "properties": {
+          "business_unit_id": {
+            "type": "string"
+          },
+          "checksum": {
+            "type": "string"
+          },
+          "exists": {
+            "type": "boolean"
+          },
+          "file_id": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "string"
+          },
+          "tenant_id": {
+            "maxLength": 255,
+            "type": "string"
+          }
+        }
+      },
+      "models.RegisteredFileResponse": {
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "type": "string"
+          },
+          "file_id": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "file_status": {
+            "type": "string"
+          },
+          "num_chunks": {
+            "type": "integer"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "models.TokenLogprob": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "logprob": {
+            "type": "number"
+          },
+          "token": {
+            "type": "string"
+          },
+          "top_logprobs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.TopLogprob"
+            }
+          }
+        }
+      },
+      "models.TopLogprob": {
+        "type": "object",
+        "properties": {
+          "bytes": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "logprob": {
+            "type": "number"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "models.ToxicityDetectionRequest": {
+        "type": "object",
+        "properties": {
+          "is_chat_completion": {
+            "type": "boolean"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.AIMessage"
+            }
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "models.TranscriptionRequest": {
+        "type": "object",
+        "properties": {
+          "chunk_length_seconds": {
+            "type": "integer"
+          },
+          "execution_settings": {
+            "$ref": "#/components/schemas/models.ExecutionConfiguration"
+          },
+          "language": {
+            "type": "string"
+          },
+          "min_p": {
+            "type": "number"
+          },
+          "model": {
+            "type": "string"
+          },
+          "presence_penalty": {
+            "type": "number"
+          },
+          "seed": {
+            "type": "integer"
+          },
+          "stride_length_seconds": {
+            "type": "integer"
+          },
+          "temperature": {
+            "type": "number"
+          },
+          "top_k": {
+            "type": "integer"
+          },
+          "top_p": {
+            "type": "number"
+          },
+          "uri": {
+            "type": "string"
+          }
+        }
+      },
+      "models.TranscriptionResponse": {
+        "type": "object",
+        "properties": {
+          "job_id": {
+            "type": "string"
+          },
+          "job_prefix": {
+            "type": "string",
+            "description": "used so that directories do not grow unbounded"
+          }
+        }
+      },
+      "models.TranscriptionResult": {
+        "type": "object",
+        "properties": {
+          "error_message": {
+            "type": "string",
+            "description": "this will null on success"
+          },
+          "transcription": {
+            "type": "string",
+            "description": "the transcription response is a single string"
+          }
+        }
+      },
+      "models.TranscriptionTopicPayload": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "description": "this is the actual request as the user submitted it",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/models.TranscriptionRequest"
+              }
+            ]
+          },
+          "response": {
+            "description": "the job id fields are in this object",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/models.TranscriptionResponse"
+              }
+            ]
+          }
+        }
+      },
+      "models.UsageEvent": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "model_name": {
+            "type": "string"
+          },
+          "endpoint_type": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "input_tokens": {
+            "type": "integer"
+          },
+          "output_tokens": {
+            "type": "integer"
+          },
+          "total_tokens": {
+            "type": "integer"
+          },
+          "cost_total": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "models.UsageListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.UsageEvent"
+            }
+          },
+          "next_cursor": {
+            "type": "string"
+          }
+        }
+      },
+      "models.UsageSummaryItem": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "model_name": {
+            "type": "string"
+          },
+          "endpoint_type": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "request_count": {
+            "type": "integer"
+          },
+          "input_tokens": {
+            "type": "integer"
+          },
+          "output_tokens": {
+            "type": "integer"
+          },
+          "total_tokens": {
+            "type": "integer"
+          },
+          "cost_total": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "models.UsageSummaryResponse": {
+        "type": "object",
+        "properties": {
+          "start_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "group_by": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.UsageSummaryItem"
+            }
+          }
+        }
+      },
+      "models.CostBreakdownLineItem": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "model_name": {
+            "type": "string"
+          },
+          "input_tokens": {
+            "type": "integer"
+          },
+          "output_tokens": {
+            "type": "integer"
+          },
+          "rate_input": {
+            "type": "number"
+          },
+          "rate_output": {
+            "type": "number"
+          },
+          "cost_input": {
+            "type": "number"
+          },
+          "cost_output": {
+            "type": "number"
+          },
+          "cost_total": {
+            "type": "number"
+          }
+        }
+      },
+      "models.CostBreakdownResponse": {
+        "type": "object",
+        "properties": {
+          "tenant_id": {
+            "type": "string"
+          },
+          "period_start": {
+            "type": "string",
+            "format": "date"
+          },
+          "period_end": {
+            "type": "string",
+            "format": "date"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "line_items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/models.CostBreakdownLineItem"
+            }
+          },
+          "grand_total": {
+            "type": "number"
+          }
+        }
+      },
+      "rag_services.GuardrailsResults": {
+        "type": "object",
+        "properties": {
+          "blocked_response": {
+            "type": "boolean"
+          },
+          "llm_response_scoring": {
+            "$ref": "#/components/schemas/rag_services.LLMResponseScoring"
+          },
+          "positive": {
+            "type": "boolean"
+          },
+          "prompt_injection": {
+            "$ref": "#/components/schemas/rag_services.PromptInjection"
+          }
+        }
+      },
+      "rag_services.LLMResponseScoring": {
+        "type": "object",
+        "properties": {
+          "average_exp_percentage": {
+            "type": "number"
+          },
+          "perplexity": {
+            "type": "number"
+          }
+        }
+      },
+      "rag_services.PromptInjection": {
+        "type": "object",
+        "properties": {
+          "found_attack": {
+            "type": "boolean"
+          },
+          "prompt_injection_score": {
+            "type": "number"
+          }
+        }
+      },
+      "rag_services.RAGChatRequest": {
+        "type": "object",
+        "properties": {
+          "business_unit_id": {
+            "type": "string"
+          },
+          "condense_chat_history": {
+            "type": "boolean"
+          },
+          "condense_question_prompt": {
+            "type": "string"
+          },
+          "embedding_model_name": {
+            "type": "string"
+          },
+          "llm_name": {
+            "type": "string"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/rag_services.RAGMessage"
+            }
+          },
+          "n_fulltext_candidates": {
+            "type": "integer"
+          },
+          "n_vector_candidates": {
+            "type": "integer"
+          },
+          "num_query_rewrites": {
+            "type": "integer"
+          },
+          "query_rewrite_prompt": {
+            "type": "string"
+          },
+          "rag_system_prompt": {
+            "type": "string"
+          },
+          "stream": {
+            "type": "boolean"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "top_k": {
+            "type": "integer"
+          },
+          "user_id": {
+            "type": "string"
+          }
+        }
+      },
+      "rag_services.RAGChatResponse": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "embedding_usage": {
+            "$ref": "#/components/schemas/rag_services.RAGChatUsage"
+          },
+          "error_message": {
+            "type": "string"
+          },
+          "guardrails_results": {
+            "$ref": "#/components/schemas/rag_services.GuardrailsResults"
+          },
+          "id": {
+            "type": "string"
+          },
+          "llm_usage": {
+            "$ref": "#/components/schemas/rag_services.RAGChatUsage"
+          },
+          "rag_citations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/rag_services.RAGCitation"
+            }
+          }
+        }
+      },
+      "rag_services.RAGChatUsage": {
+        "type": "object",
+        "properties": {
+          "completion_tokens": {
+            "type": "integer"
+          },
+          "prompt_tokens": {
+            "type": "integer"
+          },
+          "total_tokens": {
+            "type": "integer"
+          }
+        }
+      },
+      "rag_services.RAGCitation": {
+        "type": "object",
+        "properties": {
+          "file_name": {
+            "type": "string"
+          },
+          "page_number": {
+            "type": "integer"
+          },
+          "score": {
+            "type": "number"
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "rag_services.RAGMessage": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "ingest_upload_body": {
+        "required": [
+          "file",
+          "file_id"
+        ],
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "File-bytes to upload",
+            "format": "binary"
+          },
+          "file_id": {
+            "type": "string",
+            "description": "File ID that you retrieved from the rag/ingest/register API"
+          },
+          "file_end": {
+            "type": "string",
+            "description": "Boolean flag indicating end of file"
+          }
+        }
+      },
+      "models.EmbeddingResponse_usage": {
+        "type": "object",
+        "properties": {
+          "prompt_tokens": {
+            "type": "integer"
+          },
+          "total_tokens": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "rag_services.RAGChatRequest": {
+        "description": "LLM Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/rag_services.RAGChatRequest"
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  }
+}
